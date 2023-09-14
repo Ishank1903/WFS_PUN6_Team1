@@ -1,0 +1,96 @@
+drop database demo;
+create database demo;
+use demo;
+
+CREATE TABLE Category (
+    categoryId INT PRIMARY KEY,
+    name VARCHAR(255),
+    lendingPeriod INT,
+    lateFees DOUBLE,
+    noOfDaysBanned INT
+);
+
+-- Insert sample data into the Category table
+INSERT INTO Category (categoryId, name, lendingPeriod, lateFees, noOfDaysBanned)
+VALUES
+    (1, 'Laptop', 14, 2.50, 10),
+    (2, 'Book', 21, 3.00, 10),
+    (3, 'Headphones', 14, 2.75, 20),
+    (4, 'Romance', 21, 3.25, 30),
+    (5, 'History', 14, 2.50, 40),
+    (6, 'Biography', 21, 3.00, 50);
+
+-- Create the Asset table with TypeID as a foreign key
+
+CREATE TABLE Asset (
+    assetID INT PRIMARY KEY,
+    Name VARCHAR(255),
+    Description TEXT,
+    dateAdded DATE,
+    isAvailable BOOLEAN,
+    typeId INT, 
+    FOREIGN KEY (typeId) REFERENCES Category(categoryId)
+);
+
+INSERT INTO Asset (assetID, Name, Description, dateAdded, isAvailable, typeId) VALUES
+(1, 'Laptop', 'Dell Laptop', '2023-09-13', true, 1),
+(2, 'Monitor', '27-inch HP Monitor', '2023-09-13', true, 2),
+(3, 'Keyboard', 'Wireless Keyboard', '2023-09-13', true, 3);
+
+
+select * from asset;
+select * from category;
+
+
+
+
+CREATE TABLE User (
+    userId INT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    telephone VARCHAR(20),
+    email VARCHAR(255) UNIQUE NOT NULL,
+    username VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+INSERT INTO User (userId, name, telephone, email, username, password) VALUES
+(1, 'John Deer', '123-456-7890', 'john.deer@example.com', '77ffc3a603b16fafe1c75c7f59ce5310c333177cb9b48bcd81fab7dc4224fb09', '25aa34070a75ce79dcf2496484ad2301de3daa2b80581c9b265eaadb79685303'),
+(2, 'Jane Wick', '987-654-3210', 'jane.wick@example.com', 'janesmith', 'pass456'),
+(3, 'Jhonson Baby', NULL, 'alice.johnsobabyn@example.com', 'alicej', 'securepass');
+
+
+CREATE TABLE Admin (
+    userid INT,
+    FOREIGN KEY (userid) REFERENCES User(userid)
+);
+
+
+CREATE TABLE BorrowHistory (
+    borrowId INT PRIMARY KEY,
+    userId INT,
+    assetId INT,
+    borrowDate DATE,
+    returnDate DATE,
+    lateReturnFee DOUBLE,
+    isBanned BOOLEAN,
+    bannedUntil DATE,
+    FOREIGN KEY (userId) REFERENCES User(userId),
+    FOREIGN KEY (assetId) REFERENCES Asset(assetId)
+);
+
+INSERT INTO Admin (userid) VALUES (1);
+
+-- Display data from the Category table
+SELECT * FROM Category;
+
+-- Display data from the Asset table
+SELECT * FROM Asset;
+
+-- Display data from the User table
+SELECT * FROM User;
+
+-- Display data from the Admin table
+SELECT * FROM Admin;
+
+-- Display data from the Borrow table
+SELECT * FROM BorrowHistory;
